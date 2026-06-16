@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airbnb Analytics</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #ffffff;
+  --bg2: #f5f5f4;
+  --bg3: #eeede9;
+  --text: #1a1a18;
+  --text2: #6b6b67;
+  --text3: #a8a8a4;
+  --border: rgba(0,0,0,0.12);
+  --border2: rgba(0,0,0,0.22);
+  --blue: #378ADD;
+  --blue-bg: #E6F1FB;
+  --blue-text: #185FA5;
+  --green: #1D9E75;
+  --red-bg: #FCEBEB;
+  --red-text: #A32D2D;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1a;
+    --bg2: #252522;
+    --bg3: #2e2e2b;
+    --text: #f0efe9;
+    --text2: #a8a8a3;
+    --text3: #66665f;
+    --border: rgba(255,255,255,0.1);
+    --border2: rgba(255,255,255,0.2);
+    --blue-bg: #0c2a4a;
+    --blue-text: #7ab8f5;
+    --red-bg: #3a1010;
+    --red-text: #f09595;
+  }
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); line-height: 1.6; min-height: 100vh; }
+input, button, select { font-family: inherit; }
+
+/* ── Lock screen ── */
+#lockScreen {
+  position: fixed; inset: 0; background: var(--bg3);
+  display: flex; align-items: center; justify-content: center; z-index: 9999;
+}
+.lock-card {
+  background: var(--bg); border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border); padding: 40px 36px;
+  width: 100%; max-width: 380px; text-align: center;
+}
+.lock-icon { font-size: 40px; color: var(--text3); margin-bottom: 16px; }
+.lock-card h2 { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+.lock-card p { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
+.lock-input { width: 100%; padding: 10px 14px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg2); color: var(--text); font-size: 15px; margin-bottom: 10px; text-align: center; letter-spacing: 0.1em; }
+.lock-input:focus { outline: none; border-color: var(--blue); }
+.lock-btn { width: 100%; padding: 10px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; }
+.lock-btn:hover { opacity: 0.85; }
+.lock-error { font-size: 13px; color: var(--red-text); background: var(--red-bg); padding: 8px 12px; border-radius: var(--radius); margin-bottom: 10px; display: none; }
+
+/* ── App shell ── */
+#app { display: none; max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ── Header ── */
+.app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.app-header h1 { font-size: 20px; font-weight: 500; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.logout-btn { font-size: 13px; color: var(--text2); background: none; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 6px 12px; cursor: pointer; }
+.logout-btn:hover { background: var(--bg2); }
+
+/* ── Property manager ── */
+.section-card { background: var(--bg2); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; }
+.section-label { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 12px; }
+.prop-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.prop-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 10px 14px; cursor: pointer;
+  transition: border-color .15s;
+}
+.prop-item:hover { border-color: var(--border2); }
+.prop-item.active { border: 1.5px solid var(--blue); }
+.prop-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.prop-name { font-size: 14px; font-weight: 500; color: var(--text); flex: 1; }
+.prop-url-preview { font-size: 11px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+.prop-actions { display: flex; gap: 4px; }
+.icon-btn { background: none; border: none; cursor: pointer; color: var(--text2); padding: 4px 6px; border-radius: 4px; font-size: 16px; line-height: 1; }
+.icon-btn:hover { color: var(--text); background: var(--bg2); }
+.add-trigger { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text2); cursor: pointer; background: none; border: none; padding: 0; }
+.add-trigger:hover { color: var(--text); }
+.add-form { display: none; margin-top: 14px; border-top: 0.5px solid var(--border); padding-top: 14px; }
+.add-form.open { display: block; }
+.form-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-bottom: 10px; }
+.form-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.btn-sm { font-size: 13px; padding: 6px 14px; border-radius: var(--radius); cursor: pointer; border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); }
+.btn-sm:hover { background: var(--bg2); }
+.btn-primary-sm { background: var(--text); color: var(--bg); border: none; font-size: 13px; padding: 6px 14px; border-radius: var(--radius); cursor: pointer; font-weight: 500; }
+.btn-primary-sm:hover { opacity: .85; }
+
+/* ── Selector chips ── */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 99px;
+  border: 0.5px solid var(--border); cursor: pointer;
+  font-size: 13px; color: var(--text2); background: var(--bg);
+  transition: all .15s;
+}
+.chip.active { border-color: var(--blue); color: var(--blue-text); background: var(--blue-bg); font-weight: 500; }
+.chip .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Error banner ── */
+.error-banner { background: var(--red-bg); color: var(--red-text); padding: 10px 14px; border-radius: var(--radius); font-size: 13px; margin-bottom: 16px; display: none; }
+
+/* ── Metrics ── */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.metric { background: var(--bg2); border-radius: var(--radius); padding: 14px; }
+.metric-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+.metric-value { font-size: 26px; font-weight: 500; color: var(--text); }
+.metric-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+/* ── Tabs ── */
+.tabs { display: flex; gap: 2px; border-bottom: 0.5px solid var(--border); margin-bottom: 20px; overflow-x: auto; }
+.tab { padding: 8px 16px; font-size: 14px; color: var(--text2); cursor: pointer; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; white-space: nowrap; }
+.tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── Charts ── */
+.chart-wrap { position: relative; width: 100%; margin-bottom: 24px; }
+.chart-section-label { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; font-size: 12px; color: var(--text2); }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ── Calendar ── */
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 24px; }
+.cal-day-hdr { font-size: 11px; color: var(--text3); text-align: center; padding: 2px; }
+.cal-day { height: 30px; border-radius: 4px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text2); }
+.cal-day.booked { color: #fff; font-weight: 500; }
+.cal-day.blocked { background: var(--bg3); color: var(--text3); text-decoration: line-through; }
+.cal-day.empty { background: transparent; }
+.cal-month-title { grid-column: 1 / -1; font-size: 13px; font-weight: 500; color: var(--text); padding: 10px 0 4px; border-top: 0.5px solid var(--border); margin-top: 4px; }
+.cal-month-title:first-child { border-top: none; margin-top: 0; }
+
+/* ── Reservations ── */
+.resa-list { display: flex; flex-direction: column; gap: 8px; }
+.resa-card { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 12px 16px; }
+.resa-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; color: var(--blue-text); }
+.resa-avatar.blocked-av { background: var(--bg2); color: var(--text3); }
+.resa-info { flex: 1; min-width: 0; }
+.resa-title { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.resa-dates { font-size: 12px; color: var(--text2); }
+.pill { font-size: 11px; padding: 2px 8px; border-radius: 99px; flex-shrink: 0; }
+.pill-blue { background: var(--blue-bg); color: var(--blue-text); }
+.pill-gray { background: var(--bg2); color: var(--text2); }
+.resa-nights { font-size: 13px; font-weight: 500; color: var(--text); flex-shrink: 0; }
+
+/* ── Insights ── */
+.insights { display: flex; flex-direction: column; gap: 10px; }
+.insight { display: flex; gap: 10px; background: var(--bg2); border-radius: var(--radius); padding: 12px 16px; }
+.insight i { font-size: 18px; color: var(--text2); flex-shrink: 0; margin-top: 1px; }
+.insight-body { font-size: 13px; color: var(--text); line-height: 1.55; }
+.insight-label { font-size: 11px; color: var(--text2); display: block; margin-bottom: 2px; }
+
+/* ── Compare ── */
+.compare-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.cmp-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
+.cmp-title { font-size: 13px; font-weight: 500; color: var(--text); display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+.cmp-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 0.5px solid var(--border); }
+.cmp-row:last-child { border-bottom: none; }
+.cmp-key { color: var(--text2); }
+.cmp-val { font-weight: 500; color: var(--text); }
+
+/* ── Empty / loading ── */
+.state-box { text-align: center; padding: 48px 16px; color: var(--text2); }
+.state-box i { font-size: 48px; display: block; margin-bottom: 12px; color: var(--text3); }
+.state-box h3 { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.state-box p { font-size: 13px; }
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  #app { padding: 16px 12px 40px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .prop-url-preview { display: none; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LOCK SCREEN
+══════════════════════════════════════ -->
+<div id="lockScreen">
+  <div class="lock-card">
+    <div class="lock-icon"><i class="ti ti-home-heart"></i></div>
+    <h2>Airbnb Analytics</h2>
+    <p>Accès privé — entrez le mot de passe</p>
+    <div class="lock-error" id="lockError">Mot de passe incorrect</div>
+    <input class="lock-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password" />
+    <button class="lock-btn" onclick="checkPassword()">Accéder →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP
+══════════════════════════════════════ -->
+<div id="app">
+  <div class="app-header">
+    <h1><i class="ti ti-building-estate" style="font-size:20px"></i> Airbnb Analytics</h1>
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Déconnexion</button>
+  </div>
+
+  <!-- Property manager -->
+  <div class="section-card">
+    <div class="section-label">Mes propriétés</div>
+    <div class="prop-list" id="propList"></div>
+    <button class="add-trigger" onclick="toggleForm()">
+      <i class="ti ti-plus" style="font-size:15px"></i> Ajouter une propriété
+    </button>
+    <div class="add-form" id="addForm">
+      <div class="form-grid">
+        <input type="text" id="newName" placeholder="Nom (ex: Apt Tunis Lac)" style="font-size:13px;padding:8px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text)" />
+        <input type="text" id="newUrl" placeholder="https://www.airbnb.com/calendar/ical/..." style="font-size:13px;padding:8px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text)" />
+      </div>
+      <div class="form-actions">
+        <button class="btn-sm" onclick="toggleForm()">Annuler</button>
+        <button class="btn-primary-sm" onclick="addProp()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selector chips -->
+  <div class="chips" id="chips"></div>
+
+  <!-- Error -->
+  <div class="error-banner" id="errorBanner"></div>
+
+  <!-- Dashboard -->
+  <div id="dash" style="display:none">
+    <div class="metrics" id="metricsGrid"></div>
+    <div class="tabs" id="tabBar"></div>
+
+    <div id="tab-overview" class="tab-content">
+      <div class="chart-section-label">Occupation mensuelle</div>
+      <div class="legend">
+        <span><span class="legend-dot" id="legBooked" style="background:#378ADD"></span>Taux (%)</span>
+        <span><span class="legend-dot" style="background:#1D9E75"></span>Nuits réservées</span>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="occChart" role="img" aria-label="Taux d'occupation mensuel"></canvas></div>
+      <div class="chart-section-label">Distribution des durées de séjour</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="durChart" role="img" aria-label="Durées de séjour"></canvas></div>
+    </div>
+
+    <div id="tab-calendar" class="tab-content">
+      <div class="legend">
+        <span><span class="legend-dot" id="calLeg" style="background:#378ADD"></span>Réservé</span>
+        <span><span class="legend-dot" style="background:var(--bg3)"></span>Bloqué</span>
+        <span><span class="legend-dot" style="background:var(--bg2)"></span>Disponible</span>
+      </div>
+      <div id="calView"></div>
+    </div>
+
+    <div id="tab-reservations" class="tab-content">
+      <div class="resa-list" id="resaList"></div>
+    </div>
+
+    <div id="tab-insights" class="tab-content">
+      <div class="insights" id="insightsList"></div>
+    </div>
+
+    <div id="tab-compare" class="tab-content">
+      <div class="compare-cards" id="cmpCards"></div>
+      <div class="chart-section-label">Occupation mensuelle — comparaison</div>
+      <div class="legend" id="cmpLegend"></div>
+      <div class="chart-wrap" style="height:280px"><canvas id="cmpChart" role="img" aria-label="Comparaison mensuelle"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div id="emptyState" class="state-box">
+    <i class="ti ti-home-search"></i>
+    <h3>Aucune propriété configurée</h3>
+    <p>Ajoutez vos biens avec leur lien iCal ci-dessus</p>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// CONFIGURATION — modifiez ici
+// ════════════════════════════════════════
+const PASSWORD = "airbnb2024";  // ← changez ce mot de passe !
+const SESSION_KEY = "airbnb_auth";
+const STORAGE_KEY = "airbnb_props";
+// ════════════════════════════════════════
+
+const COLORS = ['#378ADD','#1D9E75','#D85A30','#7F77DD','#BA7517','#D4537E'];
+const MONTH_NAMES = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const MONTH_SHORT = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
+
+let props = [];
+let selIdx = null;
+let cache = {};
+let charts = {};
+
+// ── Auth ──────────────────────────────
+function checkPassword() {
+  const val = document.getElementById('pwdInput').value;
+  if (val === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    init();
+  } else {
+    document.getElementById('lockError').style.display = 'block';
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdInput').focus();
+  }
+}
+document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+// ── Init ──────────────────────────────
+function init() {
+  try { const s = localStorage.getItem(STORAGE_KEY); if (s) props = JSON.parse(s); } catch(e) {}
+  renderPropList();
+  renderChips();
+  if (props.length > 0) selectProp(0);
+  else document.getElementById('emptyState').style.display = 'block';
+}
+
+if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  document.getElementById('lockScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  init();
+}
+
+// ── Properties ───────────────────────
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(props)); }
+
+function toggleForm() {
+  const f = document.getElementById('addForm');
+  f.classList.toggle('open');
+  if (f.classList.contains('open')) document.getElementById('newName').focus();
+  else { document.getElementById('newName').value = ''; document.getElementById('newUrl').value = ''; }
+}
+
+function addProp() {
+  const name = document.getElementById('newName').value.trim();
+  const url = document.getElementById('newUrl').value.trim();
+  if (!name || !url) { alert('Nom et lien iCal requis.'); return; }
+  props.push({ name, url, color: COLORS[props.length % COLORS.length] });
+  save();
+  toggleForm();
+  renderPropList();
+  renderChips();
+  if (props.length === 1) selectProp(0);
+}
+
+function deleteProp(i) {
+  if (!confirm(`Supprimer "${props[i].name}" ?`)) return;
+  props.splice(i, 1);
+  cache = {};
+  save();
+  if (selIdx >= props.length) selIdx = props.length - 1;
+  renderPropList();
+  renderChips();
+  if (props.length > 0) selectProp(selIdx || 0);
+  else { document.getElementById('dash').style.display = 'none'; document.getElementById('emptyState').style.display = 'block'; }
+}
+
+function editProp(i) {
+  const p = props[i];
+  const name = prompt('Nom du bien:', p.name); if (!name) return;
+  const url = prompt('Lien iCal:', p.url); if (!url) return;
+  props[i] = { ...p, name: name.trim(), url: url.trim() };
+  delete cache[i]; save(); renderPropList(); renderChips();
+  if (selIdx === i) selectProp(i);
+}
+
+function renderPropList() {
+  document.getElementById('propList').innerHTML = props.map((p, i) => `
+    <div class="prop-item ${selIdx === i ? 'active' : ''}" onclick="selectProp(${i})">
+      <div class="prop-dot" style="background:${p.color}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="prop-name">${p.name}</div>
+        <div class="prop-url-preview">${p.url.replace('https://www.airbnb.com/calendar/ical/', '…/ical/')}</div>
+      </div>
+      <div class="prop-actions">
+        <button class="icon-btn" onclick="event.stopPropagation();editProp(${i})" title="Modifier"><i class="ti ti-edit"></i></button>
+        <button class="icon-btn" onclick="event.stopPropagation();deleteProp(${i})" title="Supprimer"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+function renderChips() {
+  if (!props.length) { document.getElementById('chips').innerHTML = ''; return; }
+  const showCmp = props.length > 1;
+  document.getElementById('chips').innerHTML =
+    props.map((p, i) => `
+      <div class="chip ${selIdx === i ? 'active' : ''}" onclick="selectProp(${i})">
+        <div class="dot" style="background:${selIdx === i ? p.color : 'var(--text3)'}"></div>${p.name}
+      </div>`).join('') +
+    (showCmp ? `<div class="chip ${selIdx === -1 ? 'active' : ''}" onclick="showCompare()"><i class="ti ti-git-compare" style="font-size:13px"></i> Comparer</div>` : '');
+}
+
+// ── Select & load ─────────────────────
+function selectProp(i) {
+  selIdx = i;
+  renderPropList();
+  renderChips();
+  if (cache[i]) { renderDash(cache[i], props[i]); return; }
+  document.getElementById('dash').style.display = 'none';
+  document.getElementById('emptyState').innerHTML = '<div class="state-box"><i class="ti ti-refresh" style="font-size:40px;display:block;margin-bottom:10px;color:var(--text3)"></i><h3>Chargement…</h3><p>Récupération du calendrier iCal</p></div>';
+  document.getElementById('emptyState').style.display = 'block';
+  document.getElementById('errorBanner').style.display = 'none';
+  fetchICS(i).then(events => renderDash(events, props[i])).catch(e => { document.getElementById('emptyState').style.display = 'none'; showErr(e.message); });
+}
+
+async function fetchICS(i) {
+  const url = props[i].url;
+  const proxies = [u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`, u => `https://corsproxy.io/?${encodeURIComponent(u)}`];
+  for (const fn of proxies) {
+    try {
+      const r = await fetch(fn(url), { signal: AbortSignal.timeout(12000) });
+      if (r.ok) { const t = await r.text(); if (t.includes('BEGIN:VCALENDAR')) { cache[i] = parseICS(t); return cache[i]; } }
+    } catch(e) {}
+  }
+  throw new Error(`Impossible de charger le calendrier de "${props[i].name}". Vérifiez le lien iCal.`);
+}
+
+function showErr(msg) {
+  const el = document.getElementById('errorBanner');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+// ── ICS parser ───────────────────────
+function parseICS(text) {
+  const events = []; const lines = text.replace(/\r\n /g, '').replace(/\r\n/g, '\n').split('\n');
+  let cur = null;
+  for (const l of lines) {
+    if (l.startsWith('BEGIN:VEVENT')) cur = {};
+    else if (l.startsWith('END:VEVENT') && cur) { if (cur.start && cur.end) events.push(cur); cur = null; }
+    else if (cur) {
+      if (l.startsWith('DTSTART')) cur.start = pd(l.split(':')[1]);
+      else if (l.startsWith('DTEND')) cur.end = pd(l.split(':')[1]);
+      else if (l.startsWith('SUMMARY')) cur.summary = l.substring(8).trim();
+      else if (l.startsWith('STATUS')) cur.status = l.split(':')[1]?.trim();
+    }
+  }
+  return events;
+}
+function pd(s) { if (!s) return null; s = s.trim(); return new Date(+s.substr(0,4), +s.substr(4,2)-1, +s.substr(6,2)); }
+function nights(e) { return Math.round((e.end - e.start) / 86400000); }
+function split(evs) {
+  return {
+    bookings: evs.filter(e => { const s = (e.summary||'').toLowerCase(); return !s.includes('not available') && !s.includes('blocked') && e.status !== 'CANCELLED'; }),
+    blocked:  evs.filter(e => { const s = (e.summary||'').toLowerCase(); return s.includes('not available') || s.includes('blocked'); })
+  };
+}
+function monthlyStats(bookings) {
+  const now = new Date();
+  return Array.from({length:12}, (_, m) => {
+    const s = new Date(now.getFullYear(), m, 1), e = new Date(now.getFullYear(), m+1, 1);
+    const days = new Date(now.getFullYear(), m+1, 0).getDate();
+    let n = 0;
+    bookings.forEach(ev => { const a = ev.start < s ? s : ev.start, b = ev.end > e ? e : ev.end; if (b > a) n += Math.round((b-a)/86400000); });
+    return { nights: n, occ: Math.round(n / days * 100) };
+  });
+}
+
+// ── Render dashboard ─────────────────
+function renderDash(evs, prop) {
+  const { bookings, blocked } = split(evs);
+  const now = new Date();
+  const totalN = bookings.reduce((a,e) => a + nights(e), 0);
+  const past = bookings.filter(e => e.end <= now).length;
+  const upcoming = bookings.filter(e => e.start >= now).length;
+  const durs = bookings.map(e => nights(e)).filter(n => n > 0);
+  const avgDur = durs.length ? durs.reduce((a,b) => a+b, 0) / durs.length : 0;
+  const ms = monthlyStats(bookings);
+  const yearOcc = Math.round(ms.reduce((a,m) => a + m.nights, 0) / 365 * 100);
+
+  document.getElementById('metricsGrid').innerHTML = `
+    <div class="metric"><div class="metric-label">Réservations</div><div class="metric-value">${bookings.length}</div><div class="metric-sub">${past} passées · ${upcoming} à venir</div></div>
+    <div class="metric"><div class="metric-label">Nuits réservées</div><div class="metric-value">${totalN}</div><div class="metric-sub">dans le calendrier</div></div>
+    <div class="metric"><div class="metric-label">Durée moyenne</div><div class="metric-value">${avgDur.toFixed(1)}</div><div class="metric-sub">nuits par séjour</div></div>
+    <div class="metric"><div class="metric-label">Taux ${now.getFullYear()}</div><div class="metric-value">${yearOcc}%</div><div class="metric-sub">d'occupation</div></div>`;
+
+  const showCmp = props.length > 1;
+  document.getElementById('tabBar').innerHTML = ['overview','calendar','reservations','insights'].concat(showCmp ? ['compare'] : []).map((t,i,a) => {
+    const labels = {overview:'Vue d\'ensemble', calendar:'Calendrier', reservations:'Réservations', insights:'Insights', compare:'Comparer'};
+    return `<button class="tab ${i===0?'active':''}" onclick="showTab('${t}')">${labels[t]}</button>`;
+  }).join('');
+
+  document.getElementById('legBooked').style.background = prop.color;
+  document.getElementById('calLeg').style.background = prop.color;
+
+  if (charts.occ) charts.occ.destroy();
+  charts.occ = new Chart(document.getElementById('occChart'), {
+    type: 'bar',
+    data: { labels: MONTH_SHORT, datasets: [
+      { label: 'Taux (%)', data: ms.map(m => m.occ), backgroundColor: prop.color + 'BB', yAxisID: 'y' },
+      { label: 'Nuits', data: ms.map(m => m.nights), type: 'line', borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,.1)', tension: .3, yAxisID: 'y1', fill: true, pointRadius: 3 }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v+'%', font:{size:11} }, grid:{color:'rgba(128,128,128,.1)'} }, y1: { beginAtZero: true, position:'right', ticks:{font:{size:11}}, grid:{display:false} }, x: { ticks: { autoSkip:false, font:{size:11} } } } }
+  });
+
+  const bkts = {'1n':0,'2-3n':0,'4-6n':0,'7n':0,'8-13n':0,'14n+':0};
+  durs.forEach(n => { if(n===1)bkts['1n']++; else if(n<=3)bkts['2-3n']++; else if(n<=6)bkts['4-6n']++; else if(n===7)bkts['7n']++; else if(n<=13)bkts['8-13n']++; else bkts['14n+']++; });
+  if (charts.dur) charts.dur.destroy();
+  charts.dur = new Chart(document.getElementById('durChart'), {
+    type:'bar', data: { labels: Object.keys(bkts), datasets: [{ data: Object.values(bkts), backgroundColor:'#5DCAA5' }] },
+    options: { responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false}}, scales: { x:{beginAtZero:true,ticks:{stepSize:1,font:{size:11}},grid:{color:'rgba(128,128,128,.1)'}}, y:{ticks:{font:{size:11}}} } }
+  });
+
+  renderCal(bookings, blocked, prop.color);
+  renderResa(bookings, blocked);
+  renderInsights(bookings, blocked, avgDur, yearOcc, ms, durs, prop.name);
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('dash').style.display = 'block';
+  document.getElementById('errorBanner').style.display = 'none';
+  showTab('overview');
+}
+
+function renderCal(bookings, blocked, color) {
+  const now = new Date(); const html = [];
+  for (let m = 0; m < 12; m++) {
+    const mS = new Date(now.getFullYear(), m, 1), mE = new Date(now.getFullYear(), m+1, 0);
+    html.push(`<div class="cal-month-title">${MONTH_NAMES[m]} ${now.getFullYear()}</div>`);
+    ['L','M','M','J','V','S','D'].forEach(d => html.push(`<div class="cal-day-hdr">${d}</div>`));
+    for (let i = 0; i < (mS.getDay()+6)%7; i++) html.push('<div class="cal-day empty"></div>');
+    for (let d = 1; d <= mE.getDate(); d++) {
+      const date = new Date(now.getFullYear(), m, d);
+      const isB = bookings.some(e => date >= e.start && date < e.end);
+      const isBl = blocked.some(e => date >= e.start && date < e.end);
+      html.push(`<div class="cal-day ${isB?'booked':isBl?'blocked':''}" ${isB?`style="background:${color}"`:''}>${d}</div>`);
+    }
+  }
+  document.getElementById('calView').innerHTML = `<div class="cal-grid">${html.join('')}</div>`;
+}
+
+function renderResa(bookings, blocked) {
+  const all = [...bookings.map(e=>({...e,type:'b'})),...blocked.map(e=>({...e,type:'bl'}))].sort((a,b) => b.start-a.start);
+  const fmt = d => d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+  document.getElementById('resaList').innerHTML = all.slice(0,60).map(e => {
+    const n = nights(e), isB = e.type==='b';
+    return `<div class="resa-card">
+      <div class="resa-avatar ${isB?'':'blocked-av'}"><i class="ti ${isB?'ti-user':'ti-lock'}"></i></div>
+      <div class="resa-info">
+        <div class="resa-title">${e.summary||(isB?'Réservation':'Bloqué')}</div>
+        <div class="resa-dates">${fmt(e.start)} → ${fmt(e.end)}</div>
+      </div>
+      <span class="pill ${isB?'pill-blue':'pill-gray'}">${isB?'Réservé':'Bloqué'}</span>
+      <span class="resa-nights">${n}n</span>
+    </div>`;
+  }).join('') || '<p style="color:var(--text2);font-size:14px">Aucune réservation.</p>';
+}
+
+function renderInsights(bookings, blocked, avgDur, yearOcc, ms, durs, name) {
+  const occs = ms.map(m => m.occ);
+  const peak = occs.indexOf(Math.max(...occs));
+  const nonZ = occs.filter(v => v > 0);
+  const lowV = nonZ.length ? Math.min(...nonZ) : 0;
+  const low = occs.indexOf(lowV);
+  const now = new Date();
+  const next = bookings.filter(e => e.start >= now).sort((a,b) => a.start-b.start)[0];
+  const maxD = durs.length ? Math.max(...durs) : 0;
+  const minD = durs.length ? Math.min(...durs) : 0;
+  const mNames = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const ins = [];
+  if (peak >= 0 && occs[peak] > 0) ins.push({i:'ti-trending-up', t:`<span class="insight-label">Pic d'activité</span>${cap(mNames[peak])} est le mois le plus chargé de ${name} avec ${occs[peak]}% d'occupation. Pensez à augmenter vos tarifs.`});
+  if (low >= 0 && low !== peak && lowV > 0) ins.push({i:'ti-trending-down', t:`<span class="insight-label">Creux saisonnier</span>${cap(mNames[low])} affiche seulement ${lowV}%. Envisagez une promotion ou plus de flexibilité tarifaire.`});
+  if (avgDur > 0) ins.push({i:'ti-clock', t:`<span class="insight-label">Durée des séjours</span>Moyenne de ${avgDur.toFixed(1)} nuits (min ${minD}n · max ${maxD}n). ${avgDur < 3 ? 'Beaucoup de courts séjours — un minimum de 2 nuits peut réduire les rotations.' : 'Bonne durée moyenne pour amortir les frais de ménage.'}`});
+  ins.push({i:'ti-chart-pie', t:`<span class="insight-label">Performance annuelle</span>Taux d'occupation de ${yearOcc}% sur ${new Date().getFullYear()}. ${yearOcc >= 70 ? 'Excellent — vous êtes au-dessus du seuil optimal.' : yearOcc >= 50 ? 'Bon niveau, il reste de la marge de progression.' : 'Sous les 50% — revoyez le prix, les photos ou la description.'}`});
+  if (next) { const d = Math.round((next.start-now)/86400000); ins.push({i:'ti-calendar-event', t:`<span class="insight-label">Prochaine réservation</span>Dans ${d} jour${d>1?'s':''} — ${next.start.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})} pour ${nights(next)} nuits.`}); }
+  document.getElementById('insightsList').innerHTML = ins.map(x => `<div class="insight"><i class="ti ${x.i}"></i><div class="insight-body">${x.t}</div></div>`).join('');
+}
+
+// ── Compare ──────────────────────────
+async function showCompare() {
+  selIdx = -1; renderChips(); renderPropList();
+  document.getElementById('dash').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('errorBanner').style.display = 'none';
+  document.getElementById('tabBar').innerHTML = ['overview','calendar','reservations','insights','compare'].map((t,i) => {
+    const labels = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer'};
+    return `<button class="tab ${t==='compare'?'active':''}" onclick="showTab('${t}')">${labels[t]}</button>`;
+  }).join('');
+  showTab('compare');
+  await Promise.all(props.map((_, i) => cache[i] ? Promise.resolve() : fetchICS(i).catch(() => {})));
+  const data = props.map((p, i) => { const { bookings } = split(cache[i] || []); return { p, bookings, ms: monthlyStats(bookings) }; });
+  document.getElementById('cmpCards').innerHTML = data.map(({ p, bookings, ms }) => {
+    const totalN = bookings.reduce((a,e) => a+nights(e), 0);
+    const yearOcc = Math.round(ms.reduce((a,m) => a+m.nights, 0) / 365 * 100);
+    const durs = bookings.map(e => nights(e)).filter(n => n > 0);
+    const avg = durs.length ? durs.reduce((a,b) => a+b,0)/durs.length : 0;
+    return `<div class="cmp-card">
+      <div class="cmp-title"><span style="width:10px;height:10px;border-radius:50%;background:${p.color};display:inline-block"></span>${p.name}</div>
+      <div class="cmp-row"><span class="cmp-key">Réservations</span><span class="cmp-val">${bookings.length}</span></div>
+      <div class="cmp-row"><span class="cmp-key">Nuits totales</span><span class="cmp-val">${totalN}</span></div>
+      <div class="cmp-row"><span class="cmp-key">Occupation</span><span class="cmp-val">${yearOcc}%</span></div>
+      <div class="cmp-row"><span class="cmp-key">Durée moyenne</span><span class="cmp-val">${avg.toFixed(1)}n</span></div>
+    </div>`;
+  }).join('');
+  document.getElementById('cmpLegend').innerHTML = props.map(p => `<span><span class="legend-dot" style="background:${p.color}"></span>${p.name}</span>`).join('');
+  if (charts.cmp) charts.cmp.destroy();
+  charts.cmp = new Chart(document.getElementById('cmpChart'), {
+    type: 'bar',
+    data: { labels: MONTH_SHORT, datasets: data.map(({ p, ms }) => ({ label: p.name, data: ms.map(m => m.occ), backgroundColor: p.color + 'BB', borderColor: p.color, borderWidth: 1 })) },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v+'%', font:{size:11} }, grid:{color:'rgba(128,128,128,.1)'} }, x: { ticks: { autoSkip:false, font:{size:11} } } } }
+  });
+}
+
+// ── Tabs ─────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => {
+    const labels = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer'};
+    t.classList.toggle('active', t.textContent === labels[name]);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const el = document.getElementById('tab-' + name);
+  if (el) el.classList.add('active');
+}
+</script>
+</body>
+</html>
