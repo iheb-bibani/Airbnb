@@ -7,240 +7,235 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-/* ── Reset & base ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #ffffff;
-  --bg2: #f5f5f4;
-  --bg3: #eeede9;
-  --text: #1a1a18;
-  --text2: #6b6b67;
-  --text3: #a8a8a4;
-  --border: rgba(0,0,0,0.12);
-  --border2: rgba(0,0,0,0.22);
-  --blue: #378ADD;
-  --blue-bg: #E6F1FB;
-  --blue-text: #185FA5;
-  --green: #1D9E75;
-  --red-bg: #FCEBEB;
-  --red-text: #A32D2D;
-  --radius: 8px;
-  --radius-lg: 12px;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f5f5f4;--bg3:#eeede9;
+  --text:#1a1a18;--text2:#6b6b67;--text3:#a8a8a4;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
+  --blue:#378ADD;--blue-bg:#E6F1FB;--blue-text:#185FA5;
+  --green:#1D9E75;--green-bg:#E1F5EE;--green-text:#0F6E56;
+  --red-bg:#FCEBEB;--red-text:#A32D2D;
+  --amber:#BA7517;--amber-bg:#FAEEDA;
+  --radius:8px;--radius-lg:12px;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1c1c1a;
-    --bg2: #252522;
-    --bg3: #2e2e2b;
-    --text: #f0efe9;
-    --text2: #a8a8a3;
-    --text3: #66665f;
-    --border: rgba(255,255,255,0.1);
-    --border2: rgba(255,255,255,0.2);
-    --blue-bg: #0c2a4a;
-    --blue-text: #7ab8f5;
-    --red-bg: #3a1010;
-    --red-text: #f09595;
-  }
-}
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); line-height: 1.6; min-height: 100vh; }
-input, button, select { font-family: inherit; }
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252522;--bg3:#2e2e2b;
+  --text:#f0efe9;--text2:#a8a8a3;--text3:#66665f;
+  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.2);
+  --blue-bg:#0c2a4a;--blue-text:#7ab8f5;
+  --green-bg:#04342c;--green-text:#5DCAA5;
+  --red-bg:#3a1010;--red-text:#f09595;
+  --amber-bg:#412402;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);line-height:1.6;min-height:100vh}
+input,button,select,textarea{font-family:inherit}
 
-/* ── Lock screen ── */
-#lockScreen {
-  position: fixed; inset: 0; background: var(--bg3);
-  display: flex; align-items: center; justify-content: center; z-index: 9999;
-}
-.lock-card {
-  background: var(--bg); border-radius: var(--radius-lg);
-  border: 0.5px solid var(--border); padding: 40px 36px;
-  width: 100%; max-width: 380px; text-align: center;
-}
-.lock-icon { font-size: 40px; color: var(--text3); margin-bottom: 16px; }
-.lock-card h2 { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
-.lock-card p { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
-.lock-input { width: 100%; padding: 10px 14px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg2); color: var(--text); font-size: 15px; margin-bottom: 10px; text-align: center; letter-spacing: 0.1em; }
-.lock-input:focus { outline: none; border-color: var(--blue); }
-.lock-btn { width: 100%; padding: 10px; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); font-size: 14px; font-weight: 500; cursor: pointer; }
-.lock-btn:hover { opacity: 0.85; }
-.lock-error { font-size: 13px; color: var(--red-text); background: var(--red-bg); padding: 8px 12px; border-radius: var(--radius); margin-bottom: 10px; display: none; }
+/* Lock */
+#lockScreen{position:fixed;inset:0;background:var(--bg3);display:flex;align-items:center;justify-content:center;z-index:9999}
+.lock-card{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:40px 36px;width:100%;max-width:380px;text-align:center}
+.lock-card h2{font-size:20px;font-weight:500;margin-bottom:6px}
+.lock-card p{font-size:14px;color:var(--text2);margin-bottom:24px}
+.lock-input{width:100%;padding:10px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg2);color:var(--text);font-size:15px;margin-bottom:10px;text-align:center;letter-spacing:.1em}
+.lock-input:focus{outline:none;border-color:var(--blue)}
+.lock-btn{width:100%;padding:10px;background:var(--text);color:var(--bg);border:none;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer}
+.lock-btn:hover{opacity:.85}
+.lock-error{font-size:13px;color:var(--red-text);background:var(--red-bg);padding:8px 12px;border-radius:var(--radius);margin-bottom:10px;display:none}
 
-/* ── App shell ── */
-#app { display: none; max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+/* App */
+#app{display:none;max-width:960px;margin:0 auto;padding:24px 16px 80px}
+.app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.app-header h1{font-size:20px;font-weight:500;display:flex;align-items:center;gap:8px}
+.logout-btn{font-size:13px;color:var(--text2);background:none;border:0.5px solid var(--border);border-radius:var(--radius);padding:6px 12px;cursor:pointer}
+.logout-btn:hover{background:var(--bg2)}
 
-/* ── Header ── */
-.app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.app-header h1 { font-size: 20px; font-weight: 500; color: var(--text); display: flex; align-items: center; gap: 8px; }
-.logout-btn { font-size: 13px; color: var(--text2); background: none; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 6px 12px; cursor: pointer; }
-.logout-btn:hover { background: var(--bg2); }
+/* Section card */
+.section-card{background:var(--bg2);border-radius:var(--radius-lg);padding:16px;margin-bottom:20px}
+.section-label{font-size:11px;font-weight:500;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
 
-/* ── Property manager ── */
-.section-card { background: var(--bg2); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; }
-.section-label { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 12px; }
-.prop-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-.prop-item {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--bg); border: 0.5px solid var(--border);
-  border-radius: var(--radius); padding: 10px 14px; cursor: pointer;
-  transition: border-color .15s;
-}
-.prop-item:hover { border-color: var(--border2); }
-.prop-item.active { border: 1.5px solid var(--blue); }
-.prop-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.prop-name { font-size: 14px; font-weight: 500; color: var(--text); flex: 1; }
-.prop-url-preview { font-size: 11px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-.prop-actions { display: flex; gap: 4px; }
-.icon-btn { background: none; border: none; cursor: pointer; color: var(--text2); padding: 4px 6px; border-radius: 4px; font-size: 16px; line-height: 1; }
-.icon-btn:hover { color: var(--text); background: var(--bg2); }
-.add-trigger { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text2); cursor: pointer; background: none; border: none; padding: 0; }
-.add-trigger:hover { color: var(--text); }
-.add-form { display: none; margin-top: 14px; border-top: 0.5px solid var(--border); padding-top: 14px; }
-.add-form.open { display: block; }
-.form-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-bottom: 10px; }
-.form-actions { display: flex; gap: 8px; justify-content: flex-end; }
-.btn-sm { font-size: 13px; padding: 6px 14px; border-radius: var(--radius); cursor: pointer; border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); }
-.btn-sm:hover { background: var(--bg2); }
-.btn-primary-sm { background: var(--text); color: var(--bg); border: none; font-size: 13px; padding: 6px 14px; border-radius: var(--radius); cursor: pointer; font-weight: 500; }
-.btn-primary-sm:hover { opacity: .85; }
+/* Props */
+.prop-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.prop-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:10px 14px;cursor:pointer;transition:border-color .15s}
+.prop-item:hover{border-color:var(--border2)}
+.prop-item.active{border:1.5px solid var(--blue)}
+.prop-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.prop-name{font-size:14px;font-weight:500;flex:1}
+.prop-url-preview{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.prop-actions{display:flex;gap:4px}
+.icon-btn{background:none;border:none;cursor:pointer;color:var(--text2);padding:4px 6px;border-radius:4px;font-size:16px;line-height:1}
+.icon-btn:hover{color:var(--text);background:var(--bg2)}
+.add-trigger{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);cursor:pointer;background:none;border:none;padding:0}
+.add-trigger:hover{color:var(--text)}
+.add-form{display:none;margin-top:14px;border-top:0.5px solid var(--border);padding-top:14px}
+.add-form.open{display:block}
+.form-grid{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:10px}
+.form-input{font-size:13px;padding:8px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text)}
+.form-input:focus{outline:none;border-color:var(--blue)}
+.form-actions{display:flex;gap:8px;justify-content:flex-end}
+.btn-sm{font-size:13px;padding:6px 14px;border-radius:var(--radius);cursor:pointer;border:0.5px solid var(--border2);background:var(--bg);color:var(--text)}
+.btn-sm:hover{background:var(--bg2)}
+.btn-primary{background:var(--text);color:var(--bg);border:none;font-size:13px;padding:6px 14px;border-radius:var(--radius);cursor:pointer;font-weight:500}
+.btn-primary:hover{opacity:.85}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
 
-/* ── Selector chips ── */
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.chip {
-  display: flex; align-items: center; gap: 6px;
-  padding: 6px 14px; border-radius: 99px;
-  border: 0.5px solid var(--border); cursor: pointer;
-  font-size: 13px; color: var(--text2); background: var(--bg);
-  transition: all .15s;
-}
-.chip.active { border-color: var(--blue); color: var(--blue-text); background: var(--blue-bg); font-weight: 500; }
-.chip .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;border:0.5px solid var(--border);cursor:pointer;font-size:13px;color:var(--text2);background:var(--bg);transition:all .15s}
+.chip.active{border-color:var(--blue);color:var(--blue-text);background:var(--blue-bg);font-weight:500}
+.chip .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ── Error banner ── */
-.error-banner { background: var(--red-bg); color: var(--red-text); padding: 10px 14px; border-radius: var(--radius); font-size: 13px; margin-bottom: 16px; display: none; }
+/* Error */
+.error-banner{background:var(--red-bg);color:var(--red-text);padding:10px 14px;border-radius:var(--radius);font-size:13px;margin-bottom:16px;display:none}
 
-/* ── Metrics ── */
-.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
-.metric { background: var(--bg2); border-radius: var(--radius); padding: 14px; }
-.metric-label { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
-.metric-value { font-size: 26px; font-weight: 500; color: var(--text); }
-.metric-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+/* Metrics */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}
+.metric{background:var(--bg2);border-radius:var(--radius);padding:14px}
+.metric-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.metric-value{font-size:26px;font-weight:500;color:var(--text)}
+.metric-sub{font-size:12px;color:var(--text3);margin-top:2px}
 
-/* ── Tabs ── */
-.tabs { display: flex; gap: 2px; border-bottom: 0.5px solid var(--border); margin-bottom: 20px; overflow-x: auto; }
-.tab { padding: 8px 16px; font-size: 14px; color: var(--text2); cursor: pointer; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; white-space: nowrap; }
-.tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+/* Tabs */
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:20px;overflow-x:auto}
+.tab{padding:8px 16px;font-size:14px;color:var(--text2);cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;white-space:nowrap;flex-shrink:0}
+.tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.tab-content{display:none}
+.tab-content.active{display:block}
 
-/* ── Charts ── */
-.chart-wrap { position: relative; width: 100%; margin-bottom: 24px; }
-.chart-section-label { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; }
-.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; font-size: 12px; color: var(--text2); }
-.legend span { display: flex; align-items: center; gap: 5px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+/* Charts */
+.chart-wrap{position:relative;width:100%;margin-bottom:24px}
+.chart-label{font-size:11px;font-weight:500;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px;font-size:12px;color:var(--text2)}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 
-/* ── Calendar ── */
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 24px; }
-.cal-day-hdr { font-size: 11px; color: var(--text3); text-align: center; padding: 2px; }
-.cal-day { height: 30px; border-radius: 4px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text2); }
-.cal-day.booked { color: #fff; font-weight: 500; }
-.cal-day.blocked { background: var(--bg3); color: var(--text3); text-decoration: line-through; }
-.cal-day.empty { background: transparent; }
-.cal-month-title { grid-column: 1 / -1; font-size: 13px; font-weight: 500; color: var(--text); padding: 10px 0 4px; border-top: 0.5px solid var(--border); margin-top: 4px; }
-.cal-month-title:first-child { border-top: none; margin-top: 0; }
+/* Year filter */
+.year-filter{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.year-filter span{font-size:12px;color:var(--text2)}
+.year-btn{font-size:12px;padding:4px 10px;border-radius:99px;border:0.5px solid var(--border);background:var(--bg);color:var(--text2);cursor:pointer}
+.year-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
 
-/* ── Reservations ── */
-.resa-list { display: flex; flex-direction: column; gap: 8px; }
-.resa-card { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 12px 16px; }
-.resa-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; color: var(--blue-text); }
-.resa-avatar.blocked-av { background: var(--bg2); color: var(--text3); }
-.resa-info { flex: 1; min-width: 0; }
-.resa-title { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.resa-dates { font-size: 12px; color: var(--text2); }
-.pill { font-size: 11px; padding: 2px 8px; border-radius: 99px; flex-shrink: 0; }
-.pill-blue { background: var(--blue-bg); color: var(--blue-text); }
-.pill-gray { background: var(--bg2); color: var(--text2); }
-.resa-nights { font-size: 13px; font-weight: 500; color: var(--text); flex-shrink: 0; }
+/* Calendar */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:24px}
+.cal-day-hdr{font-size:11px;color:var(--text3);text-align:center;padding:2px}
+.cal-day{height:30px;border-radius:4px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text2)}
+.cal-day.booked{color:#fff;font-weight:500}
+.cal-day.blocked{background:var(--bg3);color:var(--text3);text-decoration:line-through}
+.cal-day.empty{background:transparent}
+.cal-month-title{grid-column:1/-1;font-size:13px;font-weight:500;color:var(--text);padding:10px 0 4px;border-top:0.5px solid var(--border);margin-top:4px}
+.cal-month-title:first-child{border-top:none;margin-top:0}
 
-/* ── Insights ── */
-.insights { display: flex; flex-direction: column; gap: 10px; }
-.insight { display: flex; gap: 10px; background: var(--bg2); border-radius: var(--radius); padding: 12px 16px; }
-.insight i { font-size: 18px; color: var(--text2); flex-shrink: 0; margin-top: 1px; }
-.insight-body { font-size: 13px; color: var(--text); line-height: 1.55; }
-.insight-label { font-size: 11px; color: var(--text2); display: block; margin-bottom: 2px; }
+/* Reservations */
+.resa-list{display:flex;flex-direction:column;gap:8px}
+.resa-card{display:flex;align-items:center;gap:12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:12px 16px}
+.resa-av{width:36px;height:36px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:var(--blue-text)}
+.resa-av.bl{background:var(--bg2);color:var(--text3)}
+.resa-info{flex:1;min-width:0}
+.resa-title{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.resa-dates{font-size:12px;color:var(--text2)}
+.pill{font-size:11px;padding:2px 8px;border-radius:99px;flex-shrink:0}
+.pill-blue{background:var(--blue-bg);color:var(--blue-text)}
+.pill-gray{background:var(--bg2);color:var(--text2)}
+.resa-nights{font-size:13px;font-weight:500;flex-shrink:0}
 
-/* ── Compare ── */
-.compare-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
-.cmp-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
-.cmp-title { font-size: 13px; font-weight: 500; color: var(--text); display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
-.cmp-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 0.5px solid var(--border); }
-.cmp-row:last-child { border-bottom: none; }
-.cmp-key { color: var(--text2); }
-.cmp-val { font-weight: 500; color: var(--text); }
+/* Insights */
+.insights{display:flex;flex-direction:column;gap:10px}
+.insight{display:flex;gap:10px;background:var(--bg2);border-radius:var(--radius);padding:12px 16px}
+.insight i{font-size:18px;color:var(--text2);flex-shrink:0;margin-top:1px}
+.insight-body{font-size:13px;line-height:1.55}
+.insight-label{font-size:11px;color:var(--text2);display:block;margin-bottom:2px}
 
-/* ── Empty / loading ── */
-.state-box { text-align: center; padding: 48px 16px; color: var(--text2); }
-.state-box i { font-size: 48px; display: block; margin-bottom: 12px; color: var(--text3); }
-.state-box h3 { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-.state-box p { font-size: 13px; }
+/* Compare */
+.compare-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.cmp-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px}
+.cmp-title{font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.cmp-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:0.5px solid var(--border)}
+.cmp-row:last-child{border-bottom:none}
+.cmp-key{color:var(--text2)}
+.cmp-val{font-weight:500}
 
-/* ── Responsive ── */
-@media (max-width: 480px) {
-  #app { padding: 16px 12px 40px; }
-  .form-grid { grid-template-columns: 1fr; }
-  .prop-url-preview { display: none; }
-  .metrics { grid-template-columns: repeat(2, 1fr); }
+/* AI Agent */
+.ai-container{display:flex;flex-direction:column;gap:0;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.ai-header{padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--bg2)}
+.ai-badge{width:36px;height:36px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:var(--green-text)}
+.ai-header-info h3{font-size:14px;font-weight:500;margin:0 0 1px}
+.ai-header-info p{font-size:12px;color:var(--text2);margin:0}
+.ai-messages{height:380px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.ai-msg{display:flex;gap:10px;align-items:flex-start}
+.ai-msg.user{flex-direction:row-reverse}
+.ai-msg-bubble{max-width:78%;padding:10px 14px;border-radius:var(--radius-lg);font-size:13px;line-height:1.6}
+.ai-msg.assistant .ai-msg-bubble{background:var(--bg2);color:var(--text);border-bottom-left-radius:4px}
+.ai-msg.user .ai-msg-bubble{background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+.ai-msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.ai-msg.assistant .ai-msg-avatar{background:var(--green-bg);color:var(--green-text)}
+.ai-msg.user .ai-msg-avatar{background:var(--blue-bg);color:var(--blue-text)}
+.ai-input-row{display:flex;gap:8px;padding:12px 16px;border-top:0.5px solid var(--border);background:var(--bg2)}
+.ai-input{flex:1;padding:10px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;resize:none;line-height:1.4}
+.ai-input:focus{outline:none;border-color:var(--blue)}
+.ai-send{width:38px;height:38px;border-radius:var(--radius);background:var(--blue);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.ai-send:hover{opacity:.85}
+.ai-send:disabled{opacity:.4;cursor:not-allowed}
+.quick-prompts{padding:10px 16px;border-top:0.5px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;background:var(--bg)}
+.qp{font-size:11px;padding:5px 10px;border-radius:99px;border:0.5px solid var(--border2);background:var(--bg2);color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.qp:hover{border-color:var(--blue);color:var(--blue-text);background:var(--blue-bg)}
+.typing{display:flex;gap:4px;align-items:center;padding:6px 0}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:bounce .8s infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+/* State boxes */
+.state-box{text-align:center;padding:48px 16px;color:var(--text2)}
+.state-box i{font-size:48px;display:block;margin-bottom:12px;color:var(--text3)}
+.state-box h3{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
+.state-box p{font-size:13px}
+
+@media(max-width:500px){
+  #app{padding:14px 10px 60px}
+  .form-grid{grid-template-columns:1fr}
+  .prop-url-preview{display:none}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .ai-messages{height:300px}
 }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     LOCK SCREEN
-══════════════════════════════════════ -->
+<!-- LOCK -->
 <div id="lockScreen">
   <div class="lock-card">
-    <div class="lock-icon"><i class="ti ti-home-heart"></i></div>
+    <div style="font-size:40px;color:var(--text3);margin-bottom:16px"><i class="ti ti-home-heart"></i></div>
     <h2>Airbnb Analytics</h2>
     <p>Accès privé — entrez le mot de passe</p>
     <div class="lock-error" id="lockError">Mot de passe incorrect</div>
     <input class="lock-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password" />
-    <button class="lock-btn" onclick="checkPassword()">Accéder →</button>
+    <button class="lock-btn" onclick="checkPwd()">Accéder →</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     APP
-══════════════════════════════════════ -->
+<!-- APP -->
 <div id="app">
   <div class="app-header">
     <h1><i class="ti ti-building-estate" style="font-size:20px"></i> Airbnb Analytics</h1>
-    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Déconnexion</button>
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Déco.</button>
   </div>
 
   <!-- Property manager -->
   <div class="section-card">
     <div class="section-label">Mes propriétés</div>
     <div class="prop-list" id="propList"></div>
-    <button class="add-trigger" onclick="toggleForm()">
-      <i class="ti ti-plus" style="font-size:15px"></i> Ajouter une propriété
-    </button>
+    <button class="add-trigger" onclick="toggleForm()"><i class="ti ti-plus" style="font-size:15px"></i> Ajouter une propriété</button>
     <div class="add-form" id="addForm">
       <div class="form-grid">
-        <input type="text" id="newName" placeholder="Nom (ex: Apt Tunis Lac)" style="font-size:13px;padding:8px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text)" />
-        <input type="text" id="newUrl" placeholder="https://www.airbnb.com/calendar/ical/..." style="font-size:13px;padding:8px 12px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text)" />
+        <input type="text" id="newName" class="form-input" placeholder="Nom (ex: Apt La Marsa)" />
+        <input type="text" id="newUrl" class="form-input" placeholder="https://www.airbnb.com/calendar/ical/..." />
       </div>
       <div class="form-actions">
         <button class="btn-sm" onclick="toggleForm()">Annuler</button>
-        <button class="btn-primary-sm" onclick="addProp()">Enregistrer</button>
+        <button class="btn-primary" onclick="addProp()">Enregistrer</button>
       </div>
     </div>
   </div>
 
-  <!-- Selector chips -->
   <div class="chips" id="chips"></div>
-
-  <!-- Error -->
   <div class="error-banner" id="errorBanner"></div>
 
   <!-- Dashboard -->
@@ -249,17 +244,19 @@ input, button, select { font-family: inherit; }
     <div class="tabs" id="tabBar"></div>
 
     <div id="tab-overview" class="tab-content">
-      <div class="chart-section-label">Occupation mensuelle</div>
+      <div class="year-filter"><span>Période :</span><div id="yearBtns" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+      <div class="chart-label">Occupation mensuelle</div>
       <div class="legend">
-        <span><span class="legend-dot" id="legBooked" style="background:#378ADD"></span>Taux (%)</span>
+        <span><span class="legend-dot" id="legBooked" style="background:#378ADD"></span>Taux d'occupation (%)</span>
         <span><span class="legend-dot" style="background:#1D9E75"></span>Nuits réservées</span>
       </div>
       <div class="chart-wrap" style="height:260px"><canvas id="occChart" role="img" aria-label="Taux d'occupation mensuel"></canvas></div>
-      <div class="chart-section-label">Distribution des durées de séjour</div>
+      <div class="chart-label">Distribution des durées de séjour</div>
       <div class="chart-wrap" style="height:220px"><canvas id="durChart" role="img" aria-label="Durées de séjour"></canvas></div>
     </div>
 
     <div id="tab-calendar" class="tab-content">
+      <div class="year-filter"><span>Année :</span><div id="calYearBtns" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
       <div class="legend">
         <span><span class="legend-dot" id="calLeg" style="background:#378ADD"></span>Réservé</span>
         <span><span class="legend-dot" style="background:var(--bg3)"></span>Bloqué</span>
@@ -269,6 +266,7 @@ input, button, select { font-family: inherit; }
     </div>
 
     <div id="tab-reservations" class="tab-content">
+      <div class="year-filter"><span>Filtre :</span><div id="resaYearBtns" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
       <div class="resa-list" id="resaList"></div>
     </div>
 
@@ -278,13 +276,43 @@ input, button, select { font-family: inherit; }
 
     <div id="tab-compare" class="tab-content">
       <div class="compare-cards" id="cmpCards"></div>
-      <div class="chart-section-label">Occupation mensuelle — comparaison</div>
+      <div class="chart-label">Occupation mensuelle — comparaison (toutes années)</div>
       <div class="legend" id="cmpLegend"></div>
-      <div class="chart-wrap" style="height:280px"><canvas id="cmpChart" role="img" aria-label="Comparaison mensuelle"></canvas></div>
+      <div class="chart-wrap" style="height:300px"><canvas id="cmpChart" role="img" aria-label="Comparaison mensuelle"></canvas></div>
+    </div>
+
+    <div id="tab-ai" class="tab-content">
+      <div class="ai-container">
+        <div class="ai-header">
+          <div class="ai-badge"><i class="ti ti-robot"></i></div>
+          <div class="ai-header-info">
+            <h3>Expert Immobilier Tunisie</h3>
+            <p>Conseils personnalisés basés sur vos données réelles</p>
+          </div>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+          <div class="ai-msg assistant">
+            <div class="ai-msg-avatar"><i class="ti ti-robot" style="font-size:14px"></i></div>
+            <div class="ai-msg-bubble">Bonjour ! Je suis votre expert en location courte durée en Tunisie. J'ai accès à toutes vos données Airbnb — réservations, taux d'occupation, durées de séjour, saisonnalité. Posez-moi vos questions !</div>
+          </div>
+        </div>
+        <div class="quick-prompts" id="quickPrompts">
+          <div class="qp" onclick="sendQuick(this)">Analyse ma performance globale</div>
+          <div class="qp" onclick="sendQuick(this)">Quand augmenter mes tarifs ?</div>
+          <div class="qp" onclick="sendQuick(this)">Comment améliorer mon taux d'occupation ?</div>
+          <div class="qp" onclick="sendQuick(this)">Meilleure stratégie pour l'été tunisien</div>
+          <div class="qp" onclick="sendQuick(this)">Comparer mes deux biens</div>
+          <div class="qp" onclick="sendQuick(this)">Rentabilité estimée</div>
+        </div>
+        <div class="ai-input-row">
+          <textarea class="ai-input" id="aiInput" rows="1" placeholder="Posez votre question à l'expert..."></textarea>
+          <button class="ai-send" id="aiSend" onclick="sendAI()"><i class="ti ti-send" style="font-size:16px"></i></button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Empty state -->
+  <!-- Empty -->
   <div id="emptyState" class="state-box">
     <i class="ti ti-home-search"></i>
     <h3>Aucune propriété configurée</h3>
@@ -293,27 +321,29 @@ input, button, select { font-family: inherit; }
 </div>
 
 <script>
-// ════════════════════════════════════════
-// CONFIGURATION — modifiez ici
-// ════════════════════════════════════════
-const PASSWORD = "airbnb";
+// ═══════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════
+const PASSWORD   = "airbnb";
 const SESSION_KEY = "airbnb_auth";
 const STORAGE_KEY = "airbnb_props";
-// ════════════════════════════════════════
-
 const COLORS = ['#378ADD','#1D9E75','#D85A30','#7F77DD','#BA7517','#D4537E'];
-const MONTH_NAMES = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-const MONTH_SHORT = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
+const MNAMES = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const MSHORT = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
+const MNAMES_LC = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 
-let props = [];
-let selIdx = null;
-let cache = {};
-let charts = {};
+// ═══════════════════════════════════
+// STATE
+// ═══════════════════════════════════
+let props = [], selIdx = null, cache = {}, charts = {};
+let selectedYear = 'all', calYear = new Date().getFullYear(), resaYear = 'all';
+let aiHistory = [];
 
-// ── Auth ──────────────────────────────
-function checkPassword() {
-  const val = document.getElementById('pwdInput').value;
-  if (val === PASSWORD) {
+// ═══════════════════════════════════
+// AUTH
+// ═══════════════════════════════════
+function checkPwd() {
+  if (document.getElementById('pwdInput').value === PASSWORD) {
     sessionStorage.setItem(SESSION_KEY, '1');
     document.getElementById('lockScreen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
@@ -324,29 +354,27 @@ function checkPassword() {
     document.getElementById('pwdInput').focus();
   }
 }
-document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+function logout() { sessionStorage.removeItem(SESSION_KEY); location.reload(); }
 
-function logout() {
-  sessionStorage.removeItem(SESSION_KEY);
-  location.reload();
-}
-
-// ── Init ──────────────────────────────
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
 function init() {
   try { const s = localStorage.getItem(STORAGE_KEY); if (s) props = JSON.parse(s); } catch(e) {}
-  renderPropList();
-  renderChips();
+  renderPropList(); renderChips();
   if (props.length > 0) selectProp(0);
   else document.getElementById('emptyState').style.display = 'block';
 }
-
 if (sessionStorage.getItem(SESSION_KEY) === '1') {
   document.getElementById('lockScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   init();
 }
 
-// ── Properties ───────────────────────
+// ═══════════════════════════════════
+// PROPERTIES
+// ═══════════════════════════════════
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(props)); }
 
 function toggleForm() {
@@ -358,32 +386,26 @@ function toggleForm() {
 
 function addProp() {
   const name = document.getElementById('newName').value.trim();
-  const url = document.getElementById('newUrl').value.trim();
+  const url  = document.getElementById('newUrl').value.trim();
   if (!name || !url) { alert('Nom et lien iCal requis.'); return; }
   props.push({ name, url, color: COLORS[props.length % COLORS.length] });
-  save();
-  toggleForm();
-  renderPropList();
-  renderChips();
+  save(); toggleForm(); renderPropList(); renderChips();
   if (props.length === 1) selectProp(0);
 }
 
 function deleteProp(i) {
   if (!confirm(`Supprimer "${props[i].name}" ?`)) return;
-  props.splice(i, 1);
-  cache = {};
-  save();
+  props.splice(i, 1); delete cache[i]; cache = {}; save();
   if (selIdx >= props.length) selIdx = props.length - 1;
-  renderPropList();
-  renderChips();
+  renderPropList(); renderChips();
   if (props.length > 0) selectProp(selIdx || 0);
-  else { document.getElementById('dash').style.display = 'none'; document.getElementById('emptyState').style.display = 'block'; }
+  else { document.getElementById('dash').style.display='none'; document.getElementById('emptyState').style.display='block'; }
 }
 
 function editProp(i) {
   const p = props[i];
   const name = prompt('Nom du bien:', p.name); if (!name) return;
-  const url = prompt('Lien iCal:', p.url); if (!url) return;
+  const url  = prompt('Lien iCal:', p.url);   if (!url) return;
   props[i] = { ...p, name: name.trim(), url: url.trim() };
   delete cache[i]; save(); renderPropList(); renderChips();
   if (selIdx === i) selectProp(i);
@@ -395,7 +417,7 @@ function renderPropList() {
       <div class="prop-dot" style="background:${p.color}"></div>
       <div style="flex:1;min-width:0">
         <div class="prop-name">${p.name}</div>
-        <div class="prop-url-preview">${p.url.replace('https://www.airbnb.com/calendar/ical/', '…/ical/')}</div>
+        <div class="prop-url-preview">${p.url.replace('https://www.airbnb.com/calendar/ical/','…/ical/')}</div>
       </div>
       <div class="prop-actions">
         <button class="icon-btn" onclick="event.stopPropagation();editProp(${i})" title="Modifier"><i class="ti ti-edit"></i></button>
@@ -406,160 +428,268 @@ function renderPropList() {
 
 function renderChips() {
   if (!props.length) { document.getElementById('chips').innerHTML = ''; return; }
-  const showCmp = props.length > 1;
   document.getElementById('chips').innerHTML =
     props.map((p, i) => `
       <div class="chip ${selIdx === i ? 'active' : ''}" onclick="selectProp(${i})">
         <div class="dot" style="background:${selIdx === i ? p.color : 'var(--text3)'}"></div>${p.name}
       </div>`).join('') +
-    (showCmp ? `<div class="chip ${selIdx === -1 ? 'active' : ''}" onclick="showCompare()"><i class="ti ti-git-compare" style="font-size:13px"></i> Comparer</div>` : '');
+    (props.length > 1 ? `<div class="chip ${selIdx === -1 ? 'active' : ''}" onclick="showCompare()"><i class="ti ti-git-compare" style="font-size:13px"></i> Comparer</div>` : '') +
+    `<div class="chip ${selIdx === -2 ? 'active' : ''}" onclick="showAI()"><i class="ti ti-robot" style="font-size:13px"></i> Expert IA</div>`;
 }
 
-// ── Select & load ─────────────────────
+// ═══════════════════════════════════
+// LOAD & FETCH
+// ═══════════════════════════════════
 function selectProp(i) {
-  selIdx = i;
-  renderPropList();
-  renderChips();
+  selIdx = i; renderPropList(); renderChips();
   if (cache[i]) { renderDash(cache[i], props[i]); return; }
+  showLoading(); document.getElementById('errorBanner').style.display = 'none';
+  fetchICS(i).then(evs => renderDash(evs, props[i])).catch(e => { hideLoading(); showErr(e.message); });
+}
+
+function showLoading() {
   document.getElementById('dash').style.display = 'none';
   document.getElementById('emptyState').innerHTML = '<div class="state-box"><i class="ti ti-refresh" style="font-size:40px;display:block;margin-bottom:10px;color:var(--text3)"></i><h3>Chargement…</h3><p>Récupération du calendrier iCal</p></div>';
   document.getElementById('emptyState').style.display = 'block';
-  document.getElementById('errorBanner').style.display = 'none';
-  fetchICS(i).then(events => renderDash(events, props[i])).catch(e => { document.getElementById('emptyState').style.display = 'none'; showErr(e.message); });
 }
+function hideLoading() { document.getElementById('emptyState').style.display = 'none'; }
 
 async function fetchICS(i) {
   const url = props[i].url;
-  const proxies = [u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`, u => `https://corsproxy.io/?${encodeURIComponent(u)}`];
+  const proxies = [
+    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`
+  ];
   for (const fn of proxies) {
     try {
-      const r = await fetch(fn(url), { signal: AbortSignal.timeout(12000) });
+      const r = await fetch(fn(url), { signal: AbortSignal.timeout(14000) });
       if (r.ok) { const t = await r.text(); if (t.includes('BEGIN:VCALENDAR')) { cache[i] = parseICS(t); return cache[i]; } }
     } catch(e) {}
   }
   throw new Error(`Impossible de charger le calendrier de "${props[i].name}". Vérifiez le lien iCal.`);
 }
 
-function showErr(msg) {
-  const el = document.getElementById('errorBanner');
-  el.textContent = msg; el.style.display = 'block';
-}
+function showErr(msg) { const el = document.getElementById('errorBanner'); el.textContent = msg; el.style.display = 'block'; }
 
-// ── ICS parser ───────────────────────
+// ═══════════════════════════════════
+// ICS PARSER
+// ═══════════════════════════════════
 function parseICS(text) {
-  const events = []; const lines = text.replace(/\r\n /g, '').replace(/\r\n/g, '\n').split('\n');
+  const evs = [], lines = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').split('\n');
   let cur = null;
   for (const l of lines) {
     if (l.startsWith('BEGIN:VEVENT')) cur = {};
-    else if (l.startsWith('END:VEVENT') && cur) { if (cur.start && cur.end) events.push(cur); cur = null; }
+    else if (l.startsWith('END:VEVENT') && cur) { if (cur.start && cur.end) evs.push(cur); cur = null; }
     else if (cur) {
-      if (l.startsWith('DTSTART')) cur.start = pd(l.split(':')[1]);
-      else if (l.startsWith('DTEND')) cur.end = pd(l.split(':')[1]);
+      if (l.startsWith('DTSTART'))  cur.start   = pd(l.split(':')[1]);
+      else if (l.startsWith('DTEND'))   cur.end     = pd(l.split(':')[1]);
       else if (l.startsWith('SUMMARY')) cur.summary = l.substring(8).trim();
-      else if (l.startsWith('STATUS')) cur.status = l.split(':')[1]?.trim();
+      else if (l.startsWith('STATUS'))  cur.status  = l.split(':')[1]?.trim();
     }
   }
-  return events;
+  return evs;
 }
 function pd(s) { if (!s) return null; s = s.trim(); return new Date(+s.substr(0,4), +s.substr(4,2)-1, +s.substr(6,2)); }
 function nights(e) { return Math.round((e.end - e.start) / 86400000); }
 function split(evs) {
   return {
-    bookings: evs.filter(e => { const s = (e.summary||'').toLowerCase(); return !s.includes('not available') && !s.includes('blocked') && e.status !== 'CANCELLED'; }),
-    blocked:  evs.filter(e => { const s = (e.summary||'').toLowerCase(); return s.includes('not available') || s.includes('blocked'); })
+    bookings: evs.filter(e => { const s=(e.summary||'').toLowerCase(); return !s.includes('not available')&&!s.includes('blocked')&&e.status!=='CANCELLED'; }),
+    blocked:  evs.filter(e => { const s=(e.summary||'').toLowerCase(); return s.includes('not available')||s.includes('blocked'); })
   };
 }
-function monthlyStats(bookings) {
-  const now = new Date();
+
+// ═══════════════════════════════════
+// YEAR HELPERS
+// ═══════════════════════════════════
+function getYears(evs) {
+  const ys = new Set(evs.map(e => e.start?.getFullYear()).filter(Boolean));
+  return [...ys].sort((a,b) => a - b);
+}
+
+function filterByYear(evs, year) {
+  if (year === 'all') return evs;
+  return evs.filter(e => e.start?.getFullYear() === year);
+}
+
+function monthlyStats(bookings, year) {
+  const evs = filterByYear(bookings, year);
+  if (year === 'all') {
+    // Aggregate across all years per month index
+    return Array.from({length:12}, (_, m) => {
+      let totalNights = 0, totalDays = 0;
+      const years = [...new Set(bookings.map(e => e.start?.getFullYear()).filter(Boolean))];
+      years.forEach(y => {
+        const s = new Date(y,m,1), en = new Date(y,m+1,1);
+        const dim = new Date(y,m+1,0).getDate();
+        totalDays += dim;
+        bookings.forEach(e => {
+          const a = e.start < s ? s : e.start, b = e.end > en ? en : e.end;
+          if (b > a) totalNights += Math.round((b-a)/86400000);
+        });
+      });
+      return { nights: totalNights, occ: totalDays ? Math.round(totalNights/totalDays*100) : 0 };
+    });
+  }
   return Array.from({length:12}, (_, m) => {
-    const s = new Date(now.getFullYear(), m, 1), e = new Date(now.getFullYear(), m+1, 1);
-    const days = new Date(now.getFullYear(), m+1, 0).getDate();
+    const s = new Date(year,m,1), en = new Date(year,m+1,1);
+    const dim = new Date(year,m+1,0).getDate();
     let n = 0;
-    bookings.forEach(ev => { const a = ev.start < s ? s : ev.start, b = ev.end > e ? e : ev.end; if (b > a) n += Math.round((b-a)/86400000); });
-    return { nights: n, occ: Math.round(n / days * 100) };
+    evs.forEach(e => { const a = e.start<s?s:e.start, b = e.end>en?en:e.end; if(b>a) n+=Math.round((b-a)/86400000); });
+    return { nights: n, occ: Math.round(n/dim*100) };
   });
 }
 
-// ── Render dashboard ─────────────────
+// ═══════════════════════════════════
+// RENDER DASHBOARD
+// ═══════════════════════════════════
 function renderDash(evs, prop) {
   const { bookings, blocked } = split(evs);
   const now = new Date();
-  const totalN = bookings.reduce((a,e) => a + nights(e), 0);
+  const years = getYears(evs);
+  selectedYear = 'all'; calYear = now.getFullYear(); resaYear = 'all';
+
+  // Global metrics (all time)
+  const totalN = bookings.reduce((a,e) => a+nights(e), 0);
   const past = bookings.filter(e => e.end <= now).length;
   const upcoming = bookings.filter(e => e.start >= now).length;
   const durs = bookings.map(e => nights(e)).filter(n => n > 0);
-  const avgDur = durs.length ? durs.reduce((a,b) => a+b, 0) / durs.length : 0;
-  const ms = monthlyStats(bookings);
-  const yearOcc = Math.round(ms.reduce((a,m) => a + m.nights, 0) / 365 * 100);
+  const avgDur = durs.length ? durs.reduce((a,b)=>a+b,0)/durs.length : 0;
+  const firstDate = bookings.length ? new Date(Math.min(...bookings.map(e=>e.start))) : null;
+  const totalDaysSince = firstDate ? Math.round((now - firstDate)/86400000) : 0;
+  const overallOcc = totalDaysSince > 0 ? Math.round(totalN/totalDaysSince*100) : 0;
 
   document.getElementById('metricsGrid').innerHTML = `
-    <div class="metric"><div class="metric-label">Réservations</div><div class="metric-value">${bookings.length}</div><div class="metric-sub">${past} passées · ${upcoming} à venir</div></div>
-    <div class="metric"><div class="metric-label">Nuits réservées</div><div class="metric-value">${totalN}</div><div class="metric-sub">dans le calendrier</div></div>
+    <div class="metric"><div class="metric-label">Réservations totales</div><div class="metric-value">${bookings.length}</div><div class="metric-sub">${past} passées · ${upcoming} à venir</div></div>
+    <div class="metric"><div class="metric-label">Nuits réservées</div><div class="metric-value">${totalN}</div><div class="metric-sub">depuis le début</div></div>
     <div class="metric"><div class="metric-label">Durée moyenne</div><div class="metric-value">${avgDur.toFixed(1)}</div><div class="metric-sub">nuits par séjour</div></div>
-    <div class="metric"><div class="metric-label">Taux ${now.getFullYear()}</div><div class="metric-value">${yearOcc}%</div><div class="metric-sub">d'occupation</div></div>`;
+    <div class="metric"><div class="metric-label">Occupation globale</div><div class="metric-value">${overallOcc}%</div><div class="metric-sub">depuis ${firstDate ? firstDate.toLocaleDateString('fr-FR',{month:'short',year:'numeric'}) : '—'}</div></div>`;
 
-  const showCmp = props.length > 1;
-  document.getElementById('tabBar').innerHTML = ['overview','calendar','reservations','insights'].concat(showCmp ? ['compare'] : []).map((t,i,a) => {
-    const labels = {overview:'Vue d\'ensemble', calendar:'Calendrier', reservations:'Réservations', insights:'Insights', compare:'Comparer'};
-    return `<button class="tab ${i===0?'active':''}" onclick="showTab('${t}')">${labels[t]}</button>`;
-  }).join('');
+  // Tabs
+  const tabNames = ['overview','calendar','reservations','insights'].concat(props.length > 1 ? ['compare'] : []).concat(['ai']);
+  const tabLabels = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer',ai:'Expert IA'};
+  document.getElementById('tabBar').innerHTML = tabNames.map(t =>
+    `<button class="tab ${t==='overview'?'active':''}" onclick="showTab('${t}')">${tabLabels[t]}</button>`).join('');
 
   document.getElementById('legBooked').style.background = prop.color;
   document.getElementById('calLeg').style.background = prop.color;
 
-  if (charts.occ) charts.occ.destroy();
-  charts.occ = new Chart(document.getElementById('occChart'), {
-    type: 'bar',
-    data: { labels: MONTH_SHORT, datasets: [
-      { label: 'Taux (%)', data: ms.map(m => m.occ), backgroundColor: prop.color + 'BB', yAxisID: 'y' },
-      { label: 'Nuits', data: ms.map(m => m.nights), type: 'line', borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,.1)', tension: .3, yAxisID: 'y1', fill: true, pointRadius: 3 }
-    ]},
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v+'%', font:{size:11} }, grid:{color:'rgba(128,128,128,.1)'} }, y1: { beginAtZero: true, position:'right', ticks:{font:{size:11}}, grid:{display:false} }, x: { ticks: { autoSkip:false, font:{size:11} } } } }
-  });
+  // Year filter buttons
+  const yearBtnsHtml = `<button class="year-btn active" onclick="setYear('all',this,'occ')">Tout</button>` +
+    years.map(y => `<button class="year-btn" onclick="setYear(${y},this,'occ')">${y}</button>`).join('');
+  document.getElementById('yearBtns').innerHTML = yearBtnsHtml;
 
-  const bkts = {'1n':0,'2-3n':0,'4-6n':0,'7n':0,'8-13n':0,'14n+':0};
-  durs.forEach(n => { if(n===1)bkts['1n']++; else if(n<=3)bkts['2-3n']++; else if(n<=6)bkts['4-6n']++; else if(n===7)bkts['7n']++; else if(n<=13)bkts['8-13n']++; else bkts['14n+']++; });
-  if (charts.dur) charts.dur.destroy();
-  charts.dur = new Chart(document.getElementById('durChart'), {
-    type:'bar', data: { labels: Object.keys(bkts), datasets: [{ data: Object.values(bkts), backgroundColor:'#5DCAA5' }] },
-    options: { responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false}}, scales: { x:{beginAtZero:true,ticks:{stepSize:1,font:{size:11}},grid:{color:'rgba(128,128,128,.1)'}}, y:{ticks:{font:{size:11}}} } }
-  });
+  const calYearBtnsHtml = years.map(y =>
+    `<button class="year-btn ${y===calYear?'active':''}" onclick="setCalYear(${y},this)">${y}</button>`).join('');
+  document.getElementById('calYearBtns').innerHTML = calYearBtnsHtml;
 
-  renderCal(bookings, blocked, prop.color);
-  renderResa(bookings, blocked);
-  renderInsights(bookings, blocked, avgDur, yearOcc, ms, durs, prop.name);
+  const resaYearBtnsHtml = `<button class="year-btn active" onclick="setResaYear('all',this)">Tout</button>` +
+    years.map(y => `<button class="year-btn" onclick="setResaYear(${y},this)">${y}</button>`).join('');
+  document.getElementById('resaYearBtns').innerHTML = resaYearBtnsHtml;
 
-  document.getElementById('emptyState').style.display = 'none';
+  // Store for re-render
+  window._currentEvs = evs; window._currentProp = prop;
+
+  renderOccChart(bookings, prop.color, 'all');
+  renderDurChart(bookings, 'all');
+  renderCal(bookings, blocked, prop.color, calYear);
+  renderResa(bookings, blocked, 'all');
+  renderInsights(bookings, blocked, avgDur, overallOcc, years, prop.name, firstDate, totalN);
+
+  hideLoading();
   document.getElementById('dash').style.display = 'block';
   document.getElementById('errorBanner').style.display = 'none';
   showTab('overview');
 }
 
-function renderCal(bookings, blocked, color) {
-  const now = new Date(); const html = [];
+// ═══════════════════════════════════
+// YEAR FILTER ACTIONS
+// ═══════════════════════════════════
+function setYear(y, btn, _) {
+  selectedYear = y;
+  document.querySelectorAll('#yearBtns .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const { bookings } = split(window._currentEvs);
+  renderOccChart(bookings, window._currentProp.color, y);
+  renderDurChart(bookings, y);
+}
+
+function setCalYear(y, btn) {
+  calYear = y;
+  document.querySelectorAll('#calYearBtns .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const { bookings, blocked } = split(window._currentEvs);
+  renderCal(bookings, blocked, window._currentProp.color, y);
+}
+
+function setResaYear(y, btn) {
+  resaYear = y;
+  document.querySelectorAll('#resaYearBtns .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const { bookings, blocked } = split(window._currentEvs);
+  renderResa(bookings, blocked, y);
+}
+
+// ═══════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════
+function renderOccChart(bookings, color, year) {
+  const ms = monthlyStats(bookings, year);
+  if (charts.occ) charts.occ.destroy();
+  charts.occ = new Chart(document.getElementById('occChart'), {
+    type: 'bar',
+    data: { labels: MSHORT, datasets: [
+      { label: 'Taux (%)', data: ms.map(m=>m.occ), backgroundColor: color+'BB', yAxisID: 'y' },
+      { label: 'Nuits', data: ms.map(m=>m.nights), type: 'line', borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,.1)', tension: .3, yAxisID: 'y1', fill: true, pointRadius: 3 }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} },
+      scales: { y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(128,128,128,.1)'}}, y1:{beginAtZero:true,position:'right',ticks:{font:{size:11}},grid:{display:false}}, x:{ticks:{autoSkip:false,font:{size:11}}} } }
+  });
+}
+
+function renderDurChart(bookings, year) {
+  const evs = filterByYear(bookings, year);
+  const durs = evs.map(e => nights(e)).filter(n => n > 0);
+  const bkts = {'1n':0,'2-3n':0,'4-6n':0,'7n':0,'8-13n':0,'14n+':0};
+  durs.forEach(n => { if(n===1)bkts['1n']++; else if(n<=3)bkts['2-3n']++; else if(n<=6)bkts['4-6n']++; else if(n===7)bkts['7n']++; else if(n<=13)bkts['8-13n']++; else bkts['14n+']++; });
+  if (charts.dur) charts.dur.destroy();
+  charts.dur = new Chart(document.getElementById('durChart'), {
+    type:'bar', data:{ labels:Object.keys(bkts), datasets:[{data:Object.values(bkts), backgroundColor:'#5DCAA5'}] },
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false}}, scales:{ x:{beginAtZero:true,ticks:{stepSize:1,font:{size:11}},grid:{color:'rgba(128,128,128,.1)'}}, y:{ticks:{font:{size:11}}} } }
+  });
+}
+
+// ═══════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════
+function renderCal(bookings, blocked, color, year) {
+  const html = [];
   for (let m = 0; m < 12; m++) {
-    const mS = new Date(now.getFullYear(), m, 1), mE = new Date(now.getFullYear(), m+1, 0);
-    html.push(`<div class="cal-month-title">${MONTH_NAMES[m]} ${now.getFullYear()}</div>`);
+    const mS = new Date(year,m,1), mE = new Date(year,m+1,0);
+    html.push(`<div class="cal-month-title">${MNAMES[m]} ${year}</div>`);
     ['L','M','M','J','V','S','D'].forEach(d => html.push(`<div class="cal-day-hdr">${d}</div>`));
     for (let i = 0; i < (mS.getDay()+6)%7; i++) html.push('<div class="cal-day empty"></div>');
     for (let d = 1; d <= mE.getDate(); d++) {
-      const date = new Date(now.getFullYear(), m, d);
-      const isB = bookings.some(e => date >= e.start && date < e.end);
-      const isBl = blocked.some(e => date >= e.start && date < e.end);
-      html.push(`<div class="cal-day ${isB?'booked':isBl?'blocked':''}" ${isB?`style="background:${color}"`:''}>${d}</div>`);
+      const date = new Date(year,m,d);
+      const isB  = bookings.some(e => date >= e.start && date < e.end);
+      const isBl = blocked.some(e  => date >= e.start && date < e.end);
+      html.push(`<div class="cal-day ${isB?'booked':isBl?'blocked':''}" ${isB?`style="background:${color}"`:''} >${d}</div>`);
     }
   }
   document.getElementById('calView').innerHTML = `<div class="cal-grid">${html.join('')}</div>`;
 }
 
-function renderResa(bookings, blocked) {
-  const all = [...bookings.map(e=>({...e,type:'b'})),...blocked.map(e=>({...e,type:'bl'}))].sort((a,b) => b.start-a.start);
-  const fmt = d => d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
-  document.getElementById('resaList').innerHTML = all.slice(0,60).map(e => {
+// ═══════════════════════════════════
+// RESERVATIONS
+// ═══════════════════════════════════
+function renderResa(bookings, blocked, year) {
+  const allB = [...bookings.map(e=>({...e,type:'b'})), ...blocked.map(e=>({...e,type:'bl'}))];
+  const filtered = year === 'all' ? allB : allB.filter(e => e.start?.getFullYear() === year);
+  filtered.sort((a,b) => b.start - a.start);
+  const fmt = d => d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('resaList').innerHTML = filtered.slice(0,100).map(e => {
     const n = nights(e), isB = e.type==='b';
     return `<div class="resa-card">
-      <div class="resa-avatar ${isB?'':'blocked-av'}"><i class="ti ${isB?'ti-user':'ti-lock'}"></i></div>
+      <div class="resa-av ${isB?'':'bl'}"><i class="ti ${isB?'ti-user':'ti-lock'}"></i></div>
       <div class="resa-info">
         <div class="resa-title">${e.summary||(isB?'Réservation':'Bloqué')}</div>
         <div class="resa-dates">${fmt(e.start)} → ${fmt(e.end)}</div>
@@ -567,73 +697,223 @@ function renderResa(bookings, blocked) {
       <span class="pill ${isB?'pill-blue':'pill-gray'}">${isB?'Réservé':'Bloqué'}</span>
       <span class="resa-nights">${n}n</span>
     </div>`;
-  }).join('') || '<p style="color:var(--text2);font-size:14px">Aucune réservation.</p>';
+  }).join('') || '<p style="color:var(--text2);font-size:14px;padding:8px 0">Aucune réservation pour cette période.</p>';
 }
 
-function renderInsights(bookings, blocked, avgDur, yearOcc, ms, durs, name) {
+// ═══════════════════════════════════
+// INSIGHTS
+// ═══════════════════════════════════
+function renderInsights(bookings, blocked, avgDur, overallOcc, years, name, firstDate, totalN) {
+  const ms = monthlyStats(bookings, 'all');
   const occs = ms.map(m => m.occ);
   const peak = occs.indexOf(Math.max(...occs));
-  const nonZ = occs.filter(v => v > 0);
-  const lowV = nonZ.length ? Math.min(...nonZ) : 0;
-  const low = occs.indexOf(lowV);
+  const nonZ = occs.filter(v=>v>0);
+  const low  = occs.indexOf(nonZ.length ? Math.min(...nonZ) : 0);
   const now = new Date();
-  const next = bookings.filter(e => e.start >= now).sort((a,b) => a.start-b.start)[0];
+  const next = bookings.filter(e=>e.start>=now).sort((a,b)=>a.start-b.start)[0];
+  const durs = bookings.map(e=>nights(e)).filter(n=>n>0);
   const maxD = durs.length ? Math.max(...durs) : 0;
   const minD = durs.length ? Math.min(...durs) : 0;
-  const mNames = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
   const ins = [];
-  if (peak >= 0 && occs[peak] > 0) ins.push({i:'ti-trending-up', t:`<span class="insight-label">Pic d'activité</span>${cap(mNames[peak])} est le mois le plus chargé de ${name} avec ${occs[peak]}% d'occupation. Pensez à augmenter vos tarifs.`});
-  if (low >= 0 && low !== peak && lowV > 0) ins.push({i:'ti-trending-down', t:`<span class="insight-label">Creux saisonnier</span>${cap(mNames[low])} affiche seulement ${lowV}%. Envisagez une promotion ou plus de flexibilité tarifaire.`});
-  if (avgDur > 0) ins.push({i:'ti-clock', t:`<span class="insight-label">Durée des séjours</span>Moyenne de ${avgDur.toFixed(1)} nuits (min ${minD}n · max ${maxD}n). ${avgDur < 3 ? 'Beaucoup de courts séjours — un minimum de 2 nuits peut réduire les rotations.' : 'Bonne durée moyenne pour amortir les frais de ménage.'}`});
-  ins.push({i:'ti-chart-pie', t:`<span class="insight-label">Performance annuelle</span>Taux d'occupation de ${yearOcc}% sur ${new Date().getFullYear()}. ${yearOcc >= 70 ? 'Excellent — vous êtes au-dessus du seuil optimal.' : yearOcc >= 50 ? 'Bon niveau, il reste de la marge de progression.' : 'Sous les 50% — revoyez le prix, les photos ou la description.'}`});
-  if (next) { const d = Math.round((next.start-now)/86400000); ins.push({i:'ti-calendar-event', t:`<span class="insight-label">Prochaine réservation</span>Dans ${d} jour${d>1?'s':''} — ${next.start.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})} pour ${nights(next)} nuits.`}); }
-  document.getElementById('insightsList').innerHTML = ins.map(x => `<div class="insight"><i class="ti ${x.i}"></i><div class="insight-body">${x.t}</div></div>`).join('');
+
+  if (firstDate) ins.push({i:'ti-calendar',t:`<span class="insight-label">Historique complet</span>${bookings.length} réservations depuis ${firstDate.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})} — soit ${totalN} nuits réservées sur ${years.length} an${years.length>1?'s':''} de données (${years.join(', ')}).`});
+  if (peak>=0&&occs[peak]>0) ins.push({i:'ti-trending-up',t:`<span class="insight-label">Pic saisonnier (toutes années)</span>${cap(MNAMES_LC[peak])} est votre mois le plus chargé avec ${occs[peak]}% d'occupation en moyenne. Hausse tarifaire recommandée.`});
+  if (low>=0&&low!==peak&&nonZ.length) ins.push({i:'ti-trending-down',t:`<span class="insight-label">Creux saisonnier</span>${cap(MNAMES_LC[low])} est votre mois le plus creux (${occs[low]}%). Promotions ou minimum de nuits réduit conseillés.`});
+  if (avgDur>0) ins.push({i:'ti-clock',t:`<span class="insight-label">Durée des séjours</span>Moyenne de ${avgDur.toFixed(1)} nuits (min ${minD}n · max ${maxD}n). ${avgDur<3?'Beaucoup de courts séjours — envisagez un minimum de 2-3 nuits.':'Bonne durée pour amortir les frais fixes.'}`});
+  ins.push({i:'ti-chart-pie',t:`<span class="insight-label">Performance globale (depuis l'ouverture)</span>Taux d'occupation de ${overallOcc}% sur toute la période. ${overallOcc>=70?'Excellent niveau.':overallOcc>=50?'Bon niveau, encore de la marge.':'Sous les 50% — revoyez la stratégie tarifaire ou la visibilité.'}`});
+  if (next){const d=Math.round((next.start-now)/86400000);ins.push({i:'ti-calendar-event',t:`<span class="insight-label">Prochaine réservation</span>Dans ${d} jour${d>1?'s':''} — ${next.start.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})} pour ${nights(next)} nuits.`});}
+
+  document.getElementById('insightsList').innerHTML = ins.map(x =>
+    `<div class="insight"><i class="ti ${x.i}"></i><div class="insight-body">${x.t}</div></div>`).join('');
 }
 
-// ── Compare ──────────────────────────
+// ═══════════════════════════════════
+// COMPARE
+// ═══════════════════════════════════
 async function showCompare() {
   selIdx = -1; renderChips(); renderPropList();
+  const tabNames = ['overview','calendar','reservations','insights','compare','ai'];
+  const tabLabels = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer',ai:'Expert IA'};
+  document.getElementById('tabBar').innerHTML = tabNames.map(t =>
+    `<button class="tab ${t==='compare'?'active':''}" onclick="showTab('${t}')">${tabLabels[t]}</button>`).join('');
   document.getElementById('dash').style.display = 'block';
   document.getElementById('emptyState').style.display = 'none';
   document.getElementById('errorBanner').style.display = 'none';
-  document.getElementById('tabBar').innerHTML = ['overview','calendar','reservations','insights','compare'].map((t,i) => {
-    const labels = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer'};
-    return `<button class="tab ${t==='compare'?'active':''}" onclick="showTab('${t}')">${labels[t]}</button>`;
-  }).join('');
+  document.getElementById('metricsGrid').innerHTML = '';
   showTab('compare');
-  await Promise.all(props.map((_, i) => cache[i] ? Promise.resolve() : fetchICS(i).catch(() => {})));
-  const data = props.map((p, i) => { const { bookings } = split(cache[i] || []); return { p, bookings, ms: monthlyStats(bookings) }; });
-  document.getElementById('cmpCards').innerHTML = data.map(({ p, bookings, ms }) => {
-    const totalN = bookings.reduce((a,e) => a+nights(e), 0);
-    const yearOcc = Math.round(ms.reduce((a,m) => a+m.nights, 0) / 365 * 100);
-    const durs = bookings.map(e => nights(e)).filter(n => n > 0);
-    const avg = durs.length ? durs.reduce((a,b) => a+b,0)/durs.length : 0;
+  await Promise.all(props.map((_,i) => cache[i] ? Promise.resolve() : fetchICS(i).catch(()=>{})));
+  const data = props.map((p,i) => { const {bookings} = split(cache[i]||[]); return {p, bookings, ms:monthlyStats(bookings,'all')}; });
+
+  document.getElementById('cmpCards').innerHTML = data.map(({p,bookings,ms}) => {
+    const totalN = bookings.reduce((a,e)=>a+nights(e),0);
+    const durs = bookings.map(e=>nights(e)).filter(n=>n>0);
+    const avg  = durs.length ? durs.reduce((a,b)=>a+b,0)/durs.length : 0;
+    const now  = new Date();
+    const first = bookings.length ? new Date(Math.min(...bookings.map(e=>e.start))) : null;
+    const daysSince = first ? Math.round((now-first)/86400000) : 0;
+    const occ = daysSince > 0 ? Math.round(totalN/daysSince*100) : 0;
+    const years = getYears(bookings);
     return `<div class="cmp-card">
       <div class="cmp-title"><span style="width:10px;height:10px;border-radius:50%;background:${p.color};display:inline-block"></span>${p.name}</div>
       <div class="cmp-row"><span class="cmp-key">Réservations</span><span class="cmp-val">${bookings.length}</span></div>
       <div class="cmp-row"><span class="cmp-key">Nuits totales</span><span class="cmp-val">${totalN}</span></div>
-      <div class="cmp-row"><span class="cmp-key">Occupation</span><span class="cmp-val">${yearOcc}%</span></div>
+      <div class="cmp-row"><span class="cmp-key">Occupation globale</span><span class="cmp-val">${occ}%</span></div>
       <div class="cmp-row"><span class="cmp-key">Durée moyenne</span><span class="cmp-val">${avg.toFixed(1)}n</span></div>
+      <div class="cmp-row"><span class="cmp-key">Années de données</span><span class="cmp-val">${years.join(', ')||'—'}</span></div>
+      ${first?`<div class="cmp-row"><span class="cmp-key">1ère réservation</span><span class="cmp-val">${first.toLocaleDateString('fr-FR',{month:'short',year:'numeric'})}</span></div>`:''}
     </div>`;
   }).join('');
-  document.getElementById('cmpLegend').innerHTML = props.map(p => `<span><span class="legend-dot" style="background:${p.color}"></span>${p.name}</span>`).join('');
+
+  document.getElementById('cmpLegend').innerHTML = props.map(p =>
+    `<span><span class="legend-dot" style="background:${p.color}"></span>${p.name}</span>`).join('');
+
   if (charts.cmp) charts.cmp.destroy();
   charts.cmp = new Chart(document.getElementById('cmpChart'), {
-    type: 'bar',
-    data: { labels: MONTH_SHORT, datasets: data.map(({ p, ms }) => ({ label: p.name, data: ms.map(m => m.occ), backgroundColor: p.color + 'BB', borderColor: p.color, borderWidth: 1 })) },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v+'%', font:{size:11} }, grid:{color:'rgba(128,128,128,.1)'} }, x: { ticks: { autoSkip:false, font:{size:11} } } } }
+    type:'bar',
+    data:{ labels:MSHORT, datasets:data.map(({p,ms})=>({label:p.name, data:ms.map(m=>m.occ), backgroundColor:p.color+'BB', borderColor:p.color, borderWidth:1})) },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{ y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(128,128,128,.1)'}}, x:{ticks:{autoSkip:false,font:{size:11}}} } }
   });
 }
 
-// ── Tabs ─────────────────────────────
+// ═══════════════════════════════════
+// AI AGENT
+// ═══════════════════════════════════
+function showAI() {
+  selIdx = -2; renderChips(); renderPropList();
+  const tabNames = ['overview','calendar','reservations','insights'].concat(props.length>1?['compare']:[]).concat(['ai']);
+  const tabLabels = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer',ai:'Expert IA'};
+  document.getElementById('tabBar').innerHTML = tabNames.map(t =>
+    `<button class="tab ${t==='ai'?'active':''}" onclick="showTab('${t}')">${tabLabels[t]}</button>`).join('');
+  document.getElementById('dash').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('metricsGrid').innerHTML = '';
+  showTab('ai');
+}
+
+function buildDataContext() {
+  const lines = [];
+  props.forEach((p, i) => {
+    const evs = cache[i] || [];
+    const { bookings } = split(evs);
+    const now = new Date();
+    const totalN = bookings.reduce((a,e)=>a+nights(e),0);
+    const durs = bookings.map(e=>nights(e)).filter(n=>n>0);
+    const avg = durs.length ? (durs.reduce((a,b)=>a+b,0)/durs.length).toFixed(1) : 0;
+    const first = bookings.length ? new Date(Math.min(...bookings.map(e=>e.start))) : null;
+    const daysSince = first ? Math.round((now-first)/86400000) : 0;
+    const occ = daysSince > 0 ? Math.round(totalN/daysSince*100) : 0;
+    const years = getYears(bookings);
+    const ms = monthlyStats(bookings, 'all');
+    const peakM = ms.map(m=>m.occ).indexOf(Math.max(...ms.map(m=>m.occ)));
+    const upcoming = bookings.filter(e=>e.start>=now).length;
+    lines.push(`## Propriété: ${p.name}`);
+    lines.push(`- Première réservation: ${first ? first.toLocaleDateString('fr-FR') : 'inconnue'}`);
+    lines.push(`- Années de données: ${years.join(', ')||'aucune'}`);
+    lines.push(`- Total réservations: ${bookings.length} (${upcoming} à venir)`);
+    lines.push(`- Nuits réservées totales: ${totalN}`);
+    lines.push(`- Taux d'occupation global: ${occ}%`);
+    lines.push(`- Durée moyenne de séjour: ${avg} nuits`);
+    lines.push(`- Mois le plus chargé: ${MNAMES[peakM]} (${ms[peakM]?.occ}%)`);
+    lines.push(`- Occupation par mois (moyenne toutes années): ${ms.map((m,i)=>MSHORT[i]+':'+m.occ+'%').join(', ')}`);
+  });
+  return lines.join('\n');
+}
+
+function addMsg(role, content) {
+  const box = document.getElementById('aiMessages');
+  const isUser = role === 'user';
+  const div = document.createElement('div');
+  div.className = `ai-msg ${role}`;
+  div.innerHTML = `
+    <div class="ai-msg-avatar"><i class="ti ${isUser?'ti-user':'ti-robot'}" style="font-size:14px"></i></div>
+    <div class="ai-msg-bubble">${content.replace(/\n/g,'<br>')}</div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return div;
+}
+
+function addTyping() {
+  const box = document.getElementById('aiMessages');
+  const div = document.createElement('div');
+  div.className = 'ai-msg assistant';
+  div.id = 'typingIndicator';
+  div.innerHTML = `<div class="ai-msg-avatar"><i class="ti ti-robot" style="font-size:14px"></i></div><div class="ai-msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function removeTyping() { const el = document.getElementById('typingIndicator'); if(el) el.remove(); }
+
+function sendQuick(el) { document.getElementById('aiInput').value = el.textContent; sendAI(); }
+
+async function sendAI() {
+  const input = document.getElementById('aiInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('aiSend').disabled = true;
+
+  addMsg('user', msg);
+  aiHistory.push({ role:'user', content: msg });
+  addTyping();
+
+  const dataCtx = buildDataContext();
+  const systemPrompt = `Tu es un expert en immobilier locatif courte durée en Tunisie, spécialisé dans Airbnb et la location saisonnière.
+Tu connais parfaitement :
+- Le marché immobilier tunisien (prix au m², rendements par zone : Tunis, La Marsa, Sidi Bou Said, Hammamet, Sousse, Djerba, etc.)
+- La réglementation tunisienne de la location touristique
+- Les dynamiques saisonnières du tourisme en Tunisie (pic été, clientèle européenne/diaspora tunisienne, Ramadan, etc.)
+- Les stratégies de tarification dynamique adaptées au marché tunisien
+- Les plateformes alternatives à Airbnb (Booking.com, Expedia, etc.) pour le marché tunisien
+
+Voici les données réelles des propriétés de l'utilisateur :
+${dataCtx}
+
+Réponds en français, de manière directe et actionnable. Utilise les données concrètes ci-dessus pour personnaliser tes conseils. Si des données sont manquantes, dis-le. Limite les réponses à 250 mots max.`;
+
+  try {
+    const messages = [{ role:'user', content: systemPrompt }];
+    aiHistory.slice(-6).forEach(h => messages.push(h));
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, messages })
+    });
+    const data = await resp.json();
+    const reply = data?.content?.[0]?.text || 'Désolé, une erreur est survenue.';
+    removeTyping();
+    addMsg('assistant', reply);
+    aiHistory.push({ role:'assistant', content: reply });
+  } catch(e) {
+    removeTyping();
+    addMsg('assistant', 'Erreur de connexion à l\'IA. Vérifiez votre connexion internet.');
+  }
+  document.getElementById('aiSend').disabled = false;
+}
+
+// Auto-resize textarea
+document.getElementById('aiInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+document.getElementById('aiInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAI(); }
+});
+
+// ═══════════════════════════════════
+// TABS
+// ═══════════════════════════════════
 function showTab(name) {
   document.querySelectorAll('.tab').forEach(t => {
-    const labels = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer'};
-    t.classList.toggle('active', t.textContent === labels[name]);
+    const map = {overview:'Vue d\'ensemble',calendar:'Calendrier',reservations:'Réservations',insights:'Insights',compare:'Comparer',ai:'Expert IA'};
+    t.classList.toggle('active', t.textContent === map[name]);
   });
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  const el = document.getElementById('tab-' + name);
+  const el = document.getElementById('tab-'+name);
   if (el) el.classList.add('active');
 }
 </script>
